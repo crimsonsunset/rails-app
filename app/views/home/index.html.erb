@@ -1,3 +1,81 @@
-<h1>THIS IS HOME</h1>
+<h1 class='title'>THIS IS HOME</h1>
 
-<img src="https://structureofintellect.files.wordpress.com/2017/09/bubble-test.jpg" alt="Smiley face" height="500" width="500">
+<h3 class='weather'> Current Weather is: </h3>
+
+<h3 class='local-weather'> Current Local Weather is: </h3>
+
+<script>
+    console.log('helloz3')
+    
+    var title = $('.title')
+    title.text('a new title!')
+    title.css({
+        color: 'red',
+        fontSize: '40px'
+    })
+    
+
+    title.on('click', function(){
+        var randomColor = getRandomColor()
+        $(this).css({
+            color: randomColor
+        })
+    })
+    
+    function getRandomColor(){
+        return "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
+}
+
+function getWeather(){
+            var lat = "17.7767";
+        var lon = "-122.4233";
+
+
+  $.ajax({
+    url: 'api/v1/weather',
+    type: 'GET',
+    data: { lat: lat, lon: lon} ,
+    contentType: 'application/json; charset=utf-8',
+    success: function (response) {
+        console.log('got the weather!');
+        console.log(response)
+        $(".weather").text("It is currently "+ response["currently"]["temperature"] + " degrees");
+        
+    },
+    error: function (err) {
+        console.log(err);
+    }
+});
+
+}
+
+param1 = '10'
+getWeather();
+
+    
+function getWeatherFromLocation(){
+    
+    
+    navigator.geolocation.getCurrentPosition(function (location) {
+  var latitude = location.coords.latitude
+  var longitude = location.coords.longitude
+
+    $.ajax({
+          url: 'api/v1/weather',
+          type: 'GET',
+          data: { lat: latitude, lon: longitude} ,
+          contentType: 'application/json; charset=utf-8',
+          success: function (response) {
+            $(".local-weather").text("Local Weather is:  "+ response["currently"]["temperature"] + " degrees");
+          },
+          error: function () {
+              console.log(response);
+          }
+      });
+});
+}
+
+getWeatherFromLocation()
+    
+    
+</script>
